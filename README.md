@@ -1,6 +1,6 @@
 # Semester Project C
 
 ```
-gcc main.c
-.\a.exe
+build.bat (Windows)
+build.sh (Linux)
 ```
