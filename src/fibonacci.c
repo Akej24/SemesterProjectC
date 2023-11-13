@@ -1,9 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <inttypes.h>
+#include <stdbool.h>
 
-unsigned long long* generateFibonacci(unsigned int range) {
-    unsigned long long * fibonacciSequence = (unsigned long long*) malloc((unsigned long long)range * sizeof(unsigned long long));
+typedef unsigned long long BigDecimal;
+typedef unsigned int FibonacciLength;
+
+BigDecimal* generateFibonacci(FibonacciLength range) {
+    BigDecimal* fibonacciSequence = malloc(range * sizeof(BigDecimal));
+
     if (fibonacciSequence == NULL) {
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
@@ -18,28 +22,29 @@ unsigned long long* generateFibonacci(unsigned int range) {
     return fibonacciSequence;
 }
 
-void printFibonacci(unsigned int range) {
-    if (range < 2) {
-        printf("Range must be greater than or equal to 2\n");
-        return;
+bool checkIfSequenceNumberIsAboveLimit(int i, BigDecimal previous, BigDecimal current) {
+    if(i > 0 && current < previous) {
+        printf("%d. number is out of unsigned long long value", i);
+        return true;
     }
+    return false;
+}
 
-    unsigned long long* sequenceToPrint = generateFibonacci(range);
+void printFibonacci(FibonacciLength range) {
+    BigDecimal* fibonacciSequence = generateFibonacci(range);
 
     for(int i=0; i<range; i++) {
-        if(i > 0 && sequenceToPrint[i] < sequenceToPrint[i-1]) {
-            printf("Out of unsigned long long value");
-            break;
-        }
-        printf("%d. number of Fibonacci sequence %llu\n", i, sequenceToPrint[i]);
+        if(checkIfSequenceNumberIsAboveLimit(i, fibonacciSequence[i-1], fibonacciSequence[i])) break;
+        printf("%d. number of Fibonacci sequence: %llu\n", i, fibonacciSequence[i]);
     }
 
-    free(sequenceToPrint);
+    free(fibonacciSequence);
 }
 
 void displayFibonacciGui() {
-    unsigned int range;
-    printf("Enter a range of Fibonacci sequence (greater than 0): ", range);
+    printf("Enter a range of Fibonacci sequence (greater than 0): ");
+    FibonacciLength range;
     scanf("%u", &range);
     printFibonacci(range);
+    printf("\nSuccessfully generated");
 }
