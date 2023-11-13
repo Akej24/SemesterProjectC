@@ -5,13 +5,18 @@
 typedef unsigned long long BigDecimal;
 typedef unsigned int FibonacciLength;
 
-BigDecimal* generateFibonacci(FibonacciLength range) {
+BigDecimal* assignFibonacciSequenceMemory(FibonacciLength range) { 
     BigDecimal* fibonacciSequence = malloc(range * sizeof(BigDecimal));
 
     if (fibonacciSequence == NULL) {
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
+    return fibonacciSequence;
+}
+
+BigDecimal* generateFibonacci(FibonacciLength range) {
+    BigDecimal* fibonacciSequence = assignFibonacciSequenceMemory(range);
 
     fibonacciSequence[0] = 0;
     fibonacciSequence[1] = 1;
