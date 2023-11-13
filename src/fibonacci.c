@@ -51,5 +51,5 @@ void displayFibonacciGui() {
     FibonacciLength range;
     scanf("%u", &range);
     printFibonacci(range);
-    printf("\nSuccessfully generated");
+    printf("\nSuccessfully generated\n");
 }
