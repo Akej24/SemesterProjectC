@@ -2,10 +2,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include <ctype.h> 
 
 #define STRINGIFY(input) #input
-#define STRING_MAX_LENGTH 200
+#define STRING_MAX_LENGTH 255
 
 struct ConvertNumberInputData {
     char numberToConvert[STRING_MAX_LENGTH];
@@ -75,7 +74,7 @@ char* convertNumber(struct ConvertNumberInputData inputData) {
 
 struct ConvertNumberInputData constructConvertNumberInputData(char numberToConvert[STRING_MAX_LENGTH], int convertFrom, int convertOn) {
     struct ConvertNumberInputData inputData;
-    strcpy(inputData.numberToConvert, numberToConvert);
+    strcpy_s(inputData.numberToConvert, numberToConvert);
     inputData.convertFrom = convertFrom;
     inputData.convertOn = convertOn;
     return inputData;
@@ -96,16 +95,15 @@ void printConvertedNumber(struct ConvertNumberInputData inputData) {
 void displayNumberSystemConverterGui() {
     printf("\nEnter a number to convert: ");
     char numberToConvert[STRING_MAX_LENGTH];
-    int length = (int) STRING_MAX_LENGTH - (int) 1;
-    scanf("%199s", &numberToConvert);
+    scanf_s("%s", &numberToConvert);
 
     printf("In what system is your number? [2/4/8/10/16]: ");
     int convertFrom;
-    scanf("%d", &convertFrom);
+    scanf_s("%d", &convertFrom);
 
     printf("In what system do u want to write your number? [2/4/8/10/16]: " );
     int convertOn;
-    scanf("%d", &convertOn);
+    scanf_s("%d", &convertOn);
 
     struct ConvertNumberInputData inputData = constructConvertNumberInputData(numberToConvert, convertFrom, convertOn);
     printConvertedNumber(inputData);

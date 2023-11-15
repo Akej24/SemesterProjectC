@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "fibonacci.h"
 #include "bmi.h"
 #include "numberSystemConverter.h"

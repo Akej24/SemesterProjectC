@@ -1,9 +1,8 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
 
-enum Gender {MALE = 'm', FEMALE = 'f', UNKNOWN};
+enum Gender {MALE = 'm', FEMALE = 'f'};
 enum BmiCategory {UNDERWEIGHT, NORMAL, OVERWEIGHT, OBESITY};
 
 struct BmiInputData {
@@ -41,7 +40,7 @@ bool areInputDataValid(struct BmiInputData inputData) {
         printf("\nBMI is not calculated for people under 18 years of age\n");
         return false;
     }
-    if(inputData.gender == UNKNOWN) {
+    if(inputData.gender != FEMALE && inputData.gender != MALE) {
         printf("\nInvalid gender, use one of these letters: F,f,M,m\n");
         return false;
     }
@@ -60,7 +59,6 @@ struct BmiInputData constructBmiInputData(int age, char genderShortcut, double h
     enum Gender gender;
     if(genderShortcut == 'F' || genderShortcut == 'f') gender = FEMALE;
     else if(genderShortcut == 'M' || genderShortcut == 'm') gender = MALE;
-    else gender = UNKNOWN;
 
     struct BmiInputData bmiInputData;
     bmiInputData.age = age;
@@ -82,26 +80,25 @@ void printBmi(struct BmiInputData inputData) {
         case NORMAL: printf("You are in normal weight\n"); break;
         case OVERWEIGHT: printf("You are overweight\n"); break;
         case OBESITY: printf("You are obesity\n"); break;
-        default: printf("We could not assign to you any category\n"); break;
     }
 }
 
 void displayBmiGui() {
     int age;
     printf("Enter your age: ");
-    scanf("%d", &age);
+    scanf_s("%d", &age);
 
     char genderShortcut;
     printf("Enter your gender [M/F]: ");
-    scanf(" %c", &genderShortcut);
+    scanf_s(" %c", &genderShortcut);
 
     double height;
     printf("Enter your height [m]: ");
-    scanf("%lf", &height);
+    scanf_s("%lf", &height);
 
     double weight;
     printf("Enter your weight [kg]: ");
-    scanf("%lf", &weight);
+    scanf_s("%lf", &weight);
 
     struct BmiInputData inputData = constructBmiInputData(age, genderShortcut, height, weight);
     printBmi(inputData);

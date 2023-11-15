@@ -49,7 +49,7 @@ void printFibonacci(FibonacciLength range) {
 void displayFibonacciGui() {
     printf("Enter a range of Fibonacci sequence (greater than 0): ");
     FibonacciLength range;
-    scanf("%u", &range);
+    scanf_s("%u", &range);
     printFibonacci(range);
     printf("\nSuccessfully generated\n");
 }
