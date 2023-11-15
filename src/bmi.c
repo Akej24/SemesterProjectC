@@ -38,19 +38,19 @@ bool areInputDataValid(struct BmiInputData inputData) {
         return false;
     }
     if(inputData.age < 18) {
-        printf("\nBMI is not calculated for people under 18 years of age");
+        printf("\nBMI is not calculated for people under 18 years of age\n");
         return false;
     }
     if(inputData.gender == UNKNOWN) {
-        printf("\nInvalid gender, use one of these letters: F,f,M,m");
+        printf("\nInvalid gender, use one of these letters: F,f,M,m\n");
         return false;
     }
     if(inputData.height <= 0) {
-        printf("\nHeight cannot be lesser or equal to 0.00");
+        printf("\nHeight cannot be lesser or equal to 0.00\n");
         return false;
     }
     if(inputData.weight <= 0) {
-        printf("\nWeight cannot be lesser or equal to 0.00");
+        printf("\nWeight cannot be lesser or equal to 0.00\n");
         return false;
     }
     return true;
