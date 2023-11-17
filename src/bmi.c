@@ -33,23 +33,23 @@ double calculateBmi(struct BmiInputData inputData) {
 
 bool areInputDataValid(struct BmiInputData inputData) {
     if(inputData.age < 0) { 
-        printf("\nAge must be greater than 0");
+        printf_s("\nAge must be greater than 0");
         return false;
     }
     if(inputData.age < 18) {
-        printf("\nBMI is not calculated for people under 18 years of age\n");
+        printf_s("\nBMI is not calculated for people under 18 years of age\n");
         return false;
     }
     if(inputData.gender != FEMALE && inputData.gender != MALE) {
-        printf("\nInvalid gender, use one of these letters: F,f,M,m\n");
+        printf_s("\nInvalid gender, use one of these letters: F,f,M,m\n");
         return false;
     }
     if(inputData.height <= 0) {
-        printf("\nHeight cannot be lesser or equal to 0.00\n");
+        printf_s("\nHeight cannot be lesser or equal to 0.00\n");
         return false;
     }
     if(inputData.weight <= 0) {
-        printf("\nWeight cannot be lesser or equal to 0.00\n");
+        printf_s("\nWeight cannot be lesser or equal to 0.00\n");
         return false;
     }
     return true;

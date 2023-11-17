@@ -74,7 +74,7 @@ char* convertNumber(struct ConvertNumberInputData inputData) {
 
 struct ConvertNumberInputData constructConvertNumberInputData(char numberToConvert[STRING_MAX_LENGTH], int convertFrom, int convertOn) {
     struct ConvertNumberInputData inputData;
-    strcpy_s(inputData.numberToConvert, numberToConvert);
+    strcpy(inputData.numberToConvert, numberToConvert);
     inputData.convertFrom = convertFrom;
     inputData.convertOn = convertOn;
     return inputData;
@@ -82,8 +82,8 @@ struct ConvertNumberInputData constructConvertNumberInputData(char numberToConve
 
 void printConvertedNumber(struct ConvertNumberInputData inputData) {
     char* convertedNumber = convertNumber(inputData);
-    printf("\nYour converted number is: %s \n", convertedNumber);
-    printf("\n(Number %s in system %d is equal to number %s in system %d)", 
+    printf_s("\nYour converted number is: %s \n", convertedNumber);
+    printf_s("\n(Number %s in system %d is equal to number %s in system %d)", 
         inputData.numberToConvert, 
         inputData.convertFrom, 
         convertedNumber, 
@@ -93,7 +93,7 @@ void printConvertedNumber(struct ConvertNumberInputData inputData) {
 }
 
 void displayNumberSystemConverterGui() {
-    printf("\nEnter a number to convert: ");
+    printf_s("\nEnter a number to convert: ");
     char numberToConvert[STRING_MAX_LENGTH];
     scanf_s("%s", &numberToConvert);
 
