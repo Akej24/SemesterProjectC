@@ -3,9 +3,7 @@
 #include <string.h>
 
 #define MAX_EMPLOYEES_AMOUNT 10
-#define MAX_NAME_LENGTH 50
-#define MAX_SURNAME_LENGTH 50
-#define MAX_EMAIL_LENGTH 1000
+#define MAX_STRING_LENGTH 80
 #define MAX_FILE_NAME 1000
 #define MAX_TEMPLATE_LENGTH 1000
 
@@ -14,9 +12,9 @@ static int employeesIndexCounter = -1;
 
 struct Employee {
     int id;
-    char name[MAX_NAME_LENGTH];
-    char surname[MAX_SURNAME_LENGTH];
-    char email[MAX_EMAIL_LENGTH];
+    char name[MAX_STRING_LENGTH];
+    char surname[MAX_STRING_LENGTH];
+    char email[MAX_STRING_LENGTH];
     int hoursWorked;
     float brutto;
     float vat;
@@ -66,29 +64,40 @@ char* readTemplate(char* templateFileName) {
     return buffer;
 }
 
-char* replaceGaps(char* textWithGaps, struct Employee employee) {
-    char *occurrence = strstr(textWithGaps, "$EMAIL");
-    size_t emailLength = strlen(employee.email);
+void replaceGap(char* textWithGaps, char* gap, char* valueToFill){
+    char *occurrence = strstr(textWithGaps, gap);
+    size_t gapLength = strlen(gap);
+    size_t valueToFillLength = strlen(valueToFill);
     while (occurrence != NULL) {
-        memmove(occurrence + emailLength, occurrence + 6, strlen(occurrence + 6) + 1);
-        strncpy(occurrence, employee.email, emailLength);
-        occurrence = strstr(occurrence + emailLength, "$EMAIL");
+        memmove(occurrence + valueToFillLength, occurrence + gapLength, strlen(occurrence + gapLength) + 1);
+        strncpy(occurrence, valueToFill, valueToFillLength);
+        occurrence = strstr(occurrence + valueToFillLength, gap);
     }
-    occurrence = strstr(textWithGaps, "$NAME");
-    while (occurrence != NULL) {
-        strncpy(occurrence, employee.name, strlen(employee.name));
-        occurrence = strstr(occurrence + strlen(employee.name), "$NAME");
-    }
-    occurrence = strstr(textWithGaps, "$SURNAME");
-    while (occurrence != NULL) {
-        strncpy(occurrence, employee.surname, strlen(employee.surname));
-        occurrence = strstr(occurrence + strlen(employee.surname), "$SURNAME");
-    }
-    occurrence = strstr(textWithGaps, "$VAT");
-    while (occurrence != NULL) {
-        strncpy(occurrence, "5", strlen("5"));
-        occurrence = strstr(occurrence + strlen("5"), "$VAT");
-    }
+    free(occurrence);
+}
+
+char* calculateSalary(float brutto, float vatInPercent, int hoursWorked) {
+    float totalSalary = brutto * hoursWorked;
+    float totalSalaryMinusVat = totalSalary * (1 - vatInPercent/100);
+    char resultString[MAX_STRING_LENGTH];
+    sprintf(resultString, "%.2f", totalSalaryMinusVat);
+    return strdup(resultString);
+}
+
+char* replaceGaps(char* textWithGaps, struct Employee employee) {    
+    char stringVat[MAX_STRING_LENGTH];
+    sprintf(stringVat, "%.1f", employee.vat);
+
+    char hoursWorkedString[MAX_STRING_LENGTH];
+    sprintf(hoursWorkedString, "%d", employee.hoursWorked);
+    char* salary = calculateSalary(employee.brutto, employee.vat, employee.hoursWorked);
+
+    replaceGap(textWithGaps, "$EMAIL", employee.email);
+    replaceGap(textWithGaps, "$NAME", employee.name);
+    replaceGap(textWithGaps, "$SURNAME", employee.surname);
+    replaceGap(textWithGaps, "$SALARY", salary);
+    replaceGap(textWithGaps, "$HOURS_WORKED", hoursWorkedString);
+    replaceGap(textWithGaps, "$VAT", stringVat);
     return textWithGaps;
 }
 
@@ -99,9 +108,7 @@ void generateMailsForEmployees(struct Employee *employees) {
         FILE *emailFile = fopen(emailFileName, "w");
         if (emailFile != NULL) {
             char* textWithGaps = readTemplate("template.txt");
-            printf("%s", textWithGaps);
             char* textToSave = replaceGaps(textWithGaps, employees[i]);
-            printf("####: %s", textToSave);
             fwrite(textToSave, 1, strlen(textToSave), emailFile);
             fclose(emailFile);
         } else printf("Blad podczas otwierania pliku emial dla pracownika o id: %d\n", employees[i].id);
@@ -114,7 +121,7 @@ int findEmployeeIndexInArrayById(int employeeId, struct Employee *employees) {
     return -1;
 }
 
-struct Employee constructNewEmployee(int id, char name[MAX_NAME_LENGTH], char surname[MAX_SURNAME_LENGTH], char email[MAX_EMAIL_LENGTH], int hoursWorked, float brutto, float vat) {
+struct Employee constructNewEmployee(int id, char name[MAX_STRING_LENGTH], char surname[MAX_STRING_LENGTH], char email[MAX_STRING_LENGTH], int hoursWorked, float brutto, float vat) {
     struct Employee newEmployee;
     newEmployee.id = id;
     strcpy(newEmployee.name, name);
@@ -131,15 +138,15 @@ struct Employee createNewEmployee() {
     printf_s("\nPodaj id: ");
     scanf_s("%d", &id);
 
-    char name[MAX_NAME_LENGTH];
+    char name[MAX_STRING_LENGTH];
     printf_s("Podaj imie: ");
     scanf_s("%s", &name);
 
-    char surname[MAX_SURNAME_LENGTH];
+    char surname[MAX_STRING_LENGTH];
     printf_s("Podaj nazwisko: ");
     scanf_s("%s", &surname);
 
-    char email[MAX_EMAIL_LENGTH];
+    char email[MAX_STRING_LENGTH];
     printf_s("Podaj email: ");
     scanf_s("%s", &email);
 
