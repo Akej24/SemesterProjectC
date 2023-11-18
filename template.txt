@@ -1,0 +1,9 @@
+to: $EMAIL
+
+Dzień dobry $NAME $SURNAME, 
+
+przesyłamy kwotę twojego wynagrodzenia: $SALARY zl
+
+Przepracowałeś łącznie $HOURSED_WORKED h, a Twój VAT wynosi $VAT%
+
+Pozdrawiamy, Firma X

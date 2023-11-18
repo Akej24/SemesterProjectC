@@ -74,7 +74,6 @@ char* replaceGaps(char* textWithGaps, struct Employee employee) {
         strncpy(occurrence, employee.email, emailLength);
         occurrence = strstr(occurrence + emailLength, "$EMAIL");
     }
-
     occurrence = strstr(textWithGaps, "$NAME");
     while (occurrence != NULL) {
         strncpy(occurrence, employee.name, strlen(employee.name));
@@ -90,6 +89,7 @@ char* replaceGaps(char* textWithGaps, struct Employee employee) {
         strncpy(occurrence, "5", strlen("5"));
         occurrence = strstr(occurrence + strlen("5"), "$VAT");
     }
+    return textWithGaps;
 }
 
 void generateMailsForEmployees(struct Employee *employees) {
@@ -98,8 +98,10 @@ void generateMailsForEmployees(struct Employee *employees) {
         sprintf(emailFileName, "employee_email_%d.txt", employees[i].id);
         FILE *emailFile = fopen(emailFileName, "w");
         if (emailFile != NULL) {
-            char* textToSaveWithGaps = readTemplate("template.txt");
-            char* textToSave = replaceGaps(textToSaveWithGaps, employees[i]);
+            char* textWithGaps = readTemplate("template.txt");
+            printf("%s", textWithGaps);
+            char* textToSave = replaceGaps(textWithGaps, employees[i]);
+            printf("####: %s", textToSave);
             fwrite(textToSave, 1, strlen(textToSave), emailFile);
             fclose(emailFile);
         } else printf("Blad podczas otwierania pliku emial dla pracownika o id: %d\n", employees[i].id);
@@ -221,7 +223,7 @@ void dispatchOption(enum Option option, struct Employee *employees) {
             struct Employee newEmployee = createNewEmployee(); 
             employees[employeesIndexCounter] = newEmployee; 
             break;
-            }
+        }
         case READ: showAllEmployees(employees); break;
         case UPDATE: editEmployee(employees); break;
         case DELETE: deleteEmployee(employees); break;
