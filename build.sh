@@ -7,7 +7,7 @@ fi
 rm -rf ./target/*
 
 # Compile app into .exe
-gcc ./src/*.c -o ./target/app.exe
+gcc ./src/*.c ./src/bmi/*.c ./src/converter/*.c ./src/employee/*.c ./src/fibonacci/*.c -o ./target/app.exe
 
 # Run app
 ./target/app.exe

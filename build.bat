@@ -12,7 +12,7 @@ if not exist .\target\ (
 del /q /s .\target\* > nul
 
 :: Compile app into .exe
-gcc .\src\*.c -o .\target\app.exe
+gcc .\src\*.c .\src\bmi\*.c .\src\converter\*.c .\src\employee\*.c .\src\fibonacci\*.c -o .\target\app.exe
 
 :: Run app
 start .\target\app.exe

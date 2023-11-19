@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "fibonacci.h"
-#include "bmi.h"
-#include "numberSystemConverter.h"
-#include "employees.h"
+#include "fibonacci/fibonacci.h"
+#include "bmi/bmi.h"
+#include "converter/numberSystemConverter.h"
+#include "employee/employees.h"
 
 int main() {
     //displayFibonacciGui();
