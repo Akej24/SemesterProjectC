@@ -7,8 +7,9 @@
 #define MAX_FILE_NAME 1000
 #define MAX_TEMPLATE_LENGTH 1000
 
-enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, GENERATE_MAILS = 5, SAVE_TO_CSV = 6};
+enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, GENERATE_MAILS = 5, SAVE_TO_CSV = 6, IMPORT_FROM_CSV = 7};
 static int employeesIndexCounter = -1;
+static int employeeIndex = 0;
 
 struct Employee {
     int id;
@@ -224,6 +225,43 @@ void deleteEmployee(struct Employee *employees) {
     employeesIndexCounter--;
 }
 
+struct Employee* importEmployeesDataFromCsv(const char* filename) {
+    FILE* file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return NULL;
+    }
+    struct Employee* employees = malloc(MAX_EMPLOYEES_AMOUNT * sizeof(struct Employee));
+    if (employees == NULL) {
+        perror("Error allocating memory for employees");
+        fclose(file);
+        return NULL;
+    }
+    char line[2560];
+    while (fgets(line, sizeof(line), file)) {
+        printf("LINE %s", line);
+        if (strstr(line, "\"id\";\"name\";\"surname\";\"email\";\"hoursWorked\";\"brutto\";\"vat\"") != NULL) continue;
+
+        struct Employee newEmployee;
+        sscanf(line, "\"%d\";\"%49[^\"]\";\"%49[^\"]\";\"%49[^\"]\";\"%d\";\"%f\";\"%f\"",
+               &newEmployee.id, newEmployee.name, newEmployee.surname, newEmployee.email,
+               &newEmployee.hoursWorked, &newEmployee.brutto, &newEmployee.vat);
+
+        employees[employeeIndex] = newEmployee;
+        employeeIndex++;
+        if (employeeIndex >= MAX_EMPLOYEES_AMOUNT) break;
+    }
+    fclose(file);
+    struct Employee* resizedEmployees = realloc(employees, employeeIndex * sizeof(struct Employee));
+    if (resizedEmployees == NULL) {
+        perror("Error resizing memory for employees");
+        free(employees);
+        return NULL;
+    }
+    employeesIndexCounter = employeesIndexCounter + employeeIndex;
+    return resizedEmployees;
+}
+
 void dispatchOption(enum Option option, struct Employee *employees) {
     switch (option) {
         case CREATE: {
@@ -236,6 +274,12 @@ void dispatchOption(enum Option option, struct Employee *employees) {
         case DELETE: deleteEmployee(employees); break;
         case GENERATE_MAILS: generateMailsForEmployees(employees); break;
         case SAVE_TO_CSV: saveEmployeesDataToCsv(employees); break;
+        case IMPORT_FROM_CSV: {
+            struct Employee* importedEmployees = importEmployeesDataFromCsv("employees_import.csv");
+            for (int i = 0; i < employeeIndex; ++i) 
+                employees[employeesIndexCounter] = importedEmployees[i];
+            break;
+        }
     }
 }
 
@@ -251,6 +295,7 @@ void displayEmployeesGui() {
         printf_s("[4] Usun pracownika\n");
         printf_s("[5] Wygeneruj maile dla pracownikow\n");
         printf_s("[6] Zapisz dane pracownikow do CSV\n");
+        printf_s("[7] Zaimportuj dane pracownikow z CSV\n");
         printf("------------------------------------\n");
         scanf_s("%d", &option);
         switch(option) {
@@ -260,6 +305,7 @@ void displayEmployeesGui() {
             case 4: dispatchOption(DELETE, employees); break;
             case 5: dispatchOption(GENERATE_MAILS, employees); break;
             case 6: dispatchOption(SAVE_TO_CSV, employees); break;
+            case 7: dispatchOption(IMPORT_FROM_CSV, employees); break;
             default: printf_s("Wybrales nieprawidlowy numer\n"); break;
         }
     }
