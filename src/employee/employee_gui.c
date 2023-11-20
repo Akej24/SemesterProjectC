@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "employee_crud_service.h"
+#include "employee_service.h"
 
 void displayEmployeesGui() {
     struct Employee employees[MAX_EMPLOYEES_AMOUNT];

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "employee_files_persistance.h"
+#include "employee_persistance.h"
 
 enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, GENERATE_MAILS = 5, SAVE_TO_CSV = 6, IMPORT_FROM_CSV = 7};
 static int employeesCurrentAmount = 0;
