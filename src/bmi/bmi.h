@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 enum Gender {MALE = 'm', FEMALE = 'f'};
 
 struct BmiInputData {
@@ -7,5 +9,6 @@ struct BmiInputData {
     double weight;
 };
 
-void printBmi(struct BmiInputData inputData);
-void displayBmiGui();
+bool areInputDataValid(struct BmiInputData inputData);
+
+struct BmiInputData constructBmiInputData(int age, char genderShortcut, double height, double weight);

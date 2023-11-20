@@ -2,15 +2,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include "base_number.h"
 
 #define STRINGIFY(input) #input
-#define STRING_MAX_LENGTH 255
-
-struct ConvertNumberInputData {
-    char numberToConvert[STRING_MAX_LENGTH];
-    int convertFrom;
-    int convertOn;
-};
 
 char* buildConvertedNumberString(char result[STRING_MAX_LENGTH], int index) {
     memmove(result, result + index + 1, STRING_MAX_LENGTH - index - 1);
@@ -67,44 +61,19 @@ int convertToDecimal(char numberToConvert[STRING_MAX_LENGTH], int convertFrom) {
     return result;
 }
 
-char* convertNumber(struct ConvertNumberInputData inputData) {
-    int numberInDecimal = convertToDecimal(inputData.numberToConvert, inputData.convertFrom);
-    return convertFromDecimal(numberInDecimal, inputData.convertOn);
+char* convertNumber(struct BaseNumber baseNumber) {
+    int numberInDecimal = convertToDecimal(baseNumber.numberToConvert, baseNumber.convertFrom);
+    return convertFromDecimal(numberInDecimal, baseNumber.convertOn);
 }
 
-struct ConvertNumberInputData constructConvertNumberInputData(char numberToConvert[STRING_MAX_LENGTH], int convertFrom, int convertOn) {
-    struct ConvertNumberInputData inputData;
-    strcpy(inputData.numberToConvert, numberToConvert);
-    inputData.convertFrom = convertFrom;
-    inputData.convertOn = convertOn;
-    return inputData;
-}
-
-void printConvertedNumber(struct ConvertNumberInputData inputData) {
-    char* convertedNumber = convertNumber(inputData);
-    printf_s("\nYour converted number is: %s \n", convertedNumber);
-    printf_s("\n(Number %s in system %d is equal to number %s in system %d)", 
-        inputData.numberToConvert, 
-        inputData.convertFrom, 
+void printConvertedNumber(struct BaseNumber baseNumber) {
+    char* convertedNumber = convertNumber(baseNumber);
+    printf_s("\nTwoja liczba po konwersji to: %s \n", convertedNumber);
+    printf_s("\n(Liczba %s w systemie %d jest rowna liczbie %s w systemie %d)\n", 
+        baseNumber.numberToConvert, 
+        baseNumber.convertFrom, 
         convertedNumber, 
-        inputData.convertOn
+        baseNumber.convertOn
     );
     free(convertedNumber);
-}
-
-void displayNumberSystemConverterGui() {
-    printf_s("\nEnter a number to convert: ");
-    char numberToConvert[STRING_MAX_LENGTH];
-    scanf_s("%s", &numberToConvert);
-
-    printf("In what system is your number? [2/4/8/10/16]: ");
-    int convertFrom;
-    scanf_s("%d", &convertFrom);
-
-    printf("In what system do u want to write your number? [2/4/8/10/16]: " );
-    int convertOn;
-    scanf_s("%d", &convertOn);
-
-    struct ConvertNumberInputData inputData = constructConvertNumberInputData(numberToConvert, convertFrom, convertOn);
-    printConvertedNumber(inputData);
 }

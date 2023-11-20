@@ -3,13 +3,12 @@
 #include <stdbool.h>
 
 typedef unsigned long long BigDecimal;
-typedef unsigned int FibonacciLength;
+typedef int FibonacciLength;
 
 BigDecimal* assignFibonacciSequenceMemory(FibonacciLength range) { 
     BigDecimal* fibonacciSequence = malloc(range * sizeof(BigDecimal));
-
     if (fibonacciSequence == NULL) {
-        printf_s("Memory allocation failed\n");
+        printf_s("Niepoprawnie zaalokowana pamiec dla dlugosci ciagu Fibonacciego\n");
         exit(EXIT_FAILURE);
     }
     return fibonacciSequence;
@@ -17,7 +16,6 @@ BigDecimal* assignFibonacciSequenceMemory(FibonacciLength range) {
 
 BigDecimal* generateFibonacci(FibonacciLength range) {
     BigDecimal* fibonacciSequence = assignFibonacciSequenceMemory(range);
-
     fibonacciSequence[0] = 0;
     fibonacciSequence[1] = 1;
 
@@ -29,7 +27,7 @@ BigDecimal* generateFibonacci(FibonacciLength range) {
 
 bool checkIfSequenceNumberIsAboveLimit(int i, BigDecimal previous, BigDecimal current) {
     if(i > 0 && current < previous) {
-        printf_s("%d. number is out of unsigned long long value", i);
+        printf_s("%d. liczba jest poza maskymalnym zakresem", i);
         return true;
     }
     return false;
@@ -37,19 +35,10 @@ bool checkIfSequenceNumberIsAboveLimit(int i, BigDecimal previous, BigDecimal cu
 
 void printFibonacci(FibonacciLength range) {
     BigDecimal* fibonacciSequence = generateFibonacci(range);
-
     for(int i=0; i<range; i++) {
         if(checkIfSequenceNumberIsAboveLimit(i, fibonacciSequence[i-1], fibonacciSequence[i])) break;
-        printf_s("%d. number of Fibonacci sequence: %llu\n", i, fibonacciSequence[i]);
+        printf_s("%d. liczba ciagu Fibonacciego: %llu\n", i, fibonacciSequence[i]);
     }
 
     free(fibonacciSequence);
-}
-
-void displayFibonacciGui() {
-    printf_s("Enter a range of Fibonacci sequence (greater than 0): ");
-    FibonacciLength range;
-    scanf_s("%u", &range);
-    printFibonacci(range);
-    printf_s("\nSuccessfully generated\n");
 }

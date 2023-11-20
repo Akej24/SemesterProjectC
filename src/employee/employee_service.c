@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "employee_persistance.h"
 
-enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, GENERATE_MAILS = 5, SAVE_TO_CSV = 6, IMPORT_FROM_CSV = 7};
+enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, IMPORT_FROM_CSV = 5, SAVE_TO_CSV = 6, GENERATE_MAILS =7};
 static int employeesCurrentAmount = 0;
 
 int findEmployeeIndexInArrayById(int employeeId, struct Employee *employees) {
@@ -91,7 +89,7 @@ void editEmployee(struct Employee *employees) {
 
 void deleteEmployee(struct Employee *employees) {
     int employeeToDeleteId;
-    printf_s("Podaj numer pracownika do usuniecia: ");
+    printf_s("Podaj ID pracownika do usuniecia: ");
     scanf_s("%d", &employeeToDeleteId);
 
     int employeeToDeleteIndex = findEmployeeIndexInArrayById(employeeToDeleteId, employees);
@@ -114,16 +112,16 @@ void dispatchOption(enum Option option, struct Employee *employees) {
         case READ: showAllEmployees(employees); break;
         case UPDATE: editEmployee(employees); break;
         case DELETE: deleteEmployee(employees); break;
-        case GENERATE_MAILS: generateMailsForEmployees(employees, employeesCurrentAmount); break;
-        case SAVE_TO_CSV: saveEmployeesDataToCsv(employees, employeesCurrentAmount); break;
         case IMPORT_FROM_CSV: {
             int amountOfEmployeesToAdd = 0;
-            struct Employee* importedEmployees = importEmployeesDataFromCsv("employees_import.csv", &amountOfEmployeesToAdd);
+            struct Employee* importedEmployees = importEmployeesDataFromCsv("files/employees_import.csv", &amountOfEmployeesToAdd);
             for (int i = 0; i < amountOfEmployeesToAdd; ++i){
                 employees[employeesCurrentAmount] = importedEmployees[i];
                 employeesCurrentAmount++;
             }
             break;
         }
+        case SAVE_TO_CSV: saveEmployeesDataToCsv(employees, employeesCurrentAmount); break;
+        case GENERATE_MAILS: generateMailsForEmployees(employees, employeesCurrentAmount); break;
     }
 }

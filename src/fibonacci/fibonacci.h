@@ -1,4 +1,3 @@
-typedef unsigned int FibonacciLength;
+typedef int FibonacciLength;
 
-void displayFibonacciGui();
 void printFibonacci(FibonacciLength range);

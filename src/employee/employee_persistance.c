@@ -61,7 +61,7 @@ char* readTemplate(char* templateFileName) {
 
 void saveEmployeesDataToCsv(struct Employee *employees, int employeesCurrentAmount) {
     char fileName[MAX_FILE_NAME];
-    sprintf(fileName, "employees.csv");
+    sprintf(fileName, "files/employees.csv");
     FILE *file = fopen(fileName, "w");
     if (file != NULL) {
         fprintf(file, "\"id\";\"name\";\"surname\";\"email\";\"hoursWorked\";\"brutto\";\"vat\"\n");
@@ -117,10 +117,10 @@ struct Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfE
 void generateMailsForEmployees(struct Employee *employees, int employeesCurrentAmount) {
     for (int i = 0; i < employeesCurrentAmount; i++) {
         char emailFileName[MAX_FILE_NAME];
-        sprintf(emailFileName, "employee_email_%d.txt", employees[i].id);
+        sprintf(emailFileName, "files/employee_email_%d.txt", employees[i].id);
         FILE *emailFile = fopen(emailFileName, "w");
         if (emailFile != NULL) {
-            char* textWithGaps = readTemplate("template.txt");
+            char* textWithGaps = readTemplate("files/template.txt");
             char* textToSave = replaceGaps(textWithGaps, employees[i]);
             fwrite(textToSave, 1, strlen(textToSave), emailFile);
             fclose(emailFile);
