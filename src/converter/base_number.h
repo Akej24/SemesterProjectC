@@ -6,4 +6,4 @@ struct BaseNumber {
     int convertOn;
 };
 
-struct BaseNumber constructConvertNumberInputData(char numberToConvert[STRING_MAX_LENGTH], int convertFrom, int convertOn);
+struct BaseNumber constructBaseNumber(char numberToConvert[STRING_MAX_LENGTH], int convertFrom, int convertOn);

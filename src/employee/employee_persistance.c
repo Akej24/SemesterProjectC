@@ -11,6 +11,7 @@ void replaceGap(char* textWithGaps, char* gap, char* valueToFill){
     size_t gapLength = strlen(gap);
     size_t valueToFillLength = strlen(valueToFill);
     while (occurrence != NULL) {
+        //align space in an array, because value to fill the gap is almost always different than gap length (rt (2) =/= $NAME (5))
         memmove(occurrence + valueToFillLength, occurrence + gapLength, strlen(occurrence + gapLength) + 1);
         strncpy(occurrence, valueToFill, valueToFillLength);
         occurrence = strstr(occurrence + valueToFillLength, gap);
@@ -38,11 +39,13 @@ char* replaceGaps(char* textWithGaps, struct Employee employee) {
 char* readTemplate(char* templateFileName) {
     FILE *file = fopen(templateFileName, "r");
     if (file == NULL) {
-        printf("Blad podczas otwierania pliku %s", templateFileName);
+        printf_s("Blad podczas otwierania pliku %s", templateFileName);
         return NULL;
     }
 
+    // move pointer to the end of the file
     fseek(file, 0, SEEK_END);
+    // get place of pointer (length)
     long length = ftell(file);
     fseek(file, 0, SEEK_SET);
 
@@ -61,6 +64,7 @@ char* readTemplate(char* templateFileName) {
 
 void saveEmployeesDataToCsv(struct Employee *employees, int employeesCurrentAmount) {
     char fileName[MAX_FILE_NAME];
+    // fill the array space with given string
     sprintf(fileName, "files/employees.csv");
     FILE *file = fopen(fileName, "w");
     if (file != NULL) {
@@ -82,16 +86,16 @@ void saveEmployeesDataToCsv(struct Employee *employees, int employeesCurrentAmou
 struct Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfEmployeesToAdd) {
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
-        perror("Error opening file");
+        printf_s("Error opening file");
         return NULL;
     }
     struct Employee* employees = malloc(MAX_EMPLOYEES_AMOUNT * sizeof(struct Employee));
     if (employees == NULL) {
-        perror("Error allocating memory for employees");
+        printf_s("Blad poczas alokowania pamieci dla pracownikow");
         fclose(file);
         return NULL;
     }
-    char line[2560];
+    char line[1000];
     while (fgets(line, sizeof(line), file)) {
         if (strstr(line, "\"id\";\"name\";\"surname\";\"email\";\"hoursWorked\";\"brutto\";\"vat\"") != NULL) continue;
 
@@ -105,9 +109,10 @@ struct Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfE
         if (*amountOfEmployeesToAdd >= MAX_EMPLOYEES_AMOUNT) break;
     }
     fclose(file);
+    // realloc memory for given amount of imported employees and next return this array of amount of imported employees
     struct Employee* resizedEmployees = realloc(employees, (*amountOfEmployeesToAdd) * sizeof(struct Employee));
     if (resizedEmployees == NULL) {
-        perror("Error resizing memory for employees");
+        printf_s("Blad podczas zmiany zaalokowanej pamieci dla pracownikow");
         free(employees);
         return NULL;
     }

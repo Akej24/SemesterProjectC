@@ -16,7 +16,7 @@ void displayEmployeesGui() {
         printf_s("[6] Zapisz dane pracownikow do CSV\n");
         printf_s("[7] Wygeneruj maile dla pracownikow\n");
         printf_s("[8] Wyjdz\n");
-        printf("------------------------------------\n");
+        printf_s("------------------------------------\n");
         if (scanf_s("%d", &option) != 1 || option <= 0) {
             printf_s("Wybrales nieprawidlowy numer\n");
             while (getchar() != '\n');
@@ -27,9 +27,9 @@ void displayEmployeesGui() {
             case 2: dispatchOption(READ, employees); break;
             case 3: dispatchOption(UPDATE, employees); break;
             case 4: dispatchOption(DELETE, employees); break;
-            case 5: dispatchOption(GENERATE_MAILS, employees); break;
+            case 5: dispatchOption(IMPORT_FROM_CSV, employees); break;
             case 6: dispatchOption(SAVE_TO_CSV, employees); break;
-            case 7: dispatchOption(IMPORT_FROM_CSV, employees); break;
+            case 7: dispatchOption(GENERATE_MAILS, employees); break;
             case 8: shouldRun = 0; break;
             default: printf_s("Wybrales nieprawidlowy numer\n"); break;
         }

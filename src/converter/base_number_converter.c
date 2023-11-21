@@ -4,11 +4,17 @@
 #include <string.h>
 #include "base_number.h"
 
-#define STRINGIFY(input) #input
-
 char* buildConvertedNumberString(char result[STRING_MAX_LENGTH], int index) {
+    printf("liczba %s\n", result);
+    printf("result %s index %d\n", result, index);
+    // converted number is written like xxx1010101 in an array, so we want to 
+    // move it in variable 'result', 
+    // on index 'result + index + 1', 
+    // copy 'string max length - index - 1' chars (~how many times do it)
+    // xxx1110101 -> 1110101xxx
     memmove(result, result + index + 1, STRING_MAX_LENGTH - index - 1);
     result[STRING_MAX_LENGTH - index - 1] = '\0';
+    printf("liczba %s", result);
     return result;
 }
 
@@ -26,6 +32,10 @@ char writeDigitAsChar(int digit) {
 
 char* convertFromDecimal(int decimalNumber, int convertTo) {
     char* result = malloc(STRING_MAX_LENGTH * sizeof(char));
+    if (result == NULL) {
+        printf_s("Niepoprawnie zaalokowana pamiec dla zmiennej result przy konwersji z liczby dziesietnej\n");
+        exit(EXIT_FAILURE);
+    }
     int index = STRING_MAX_LENGTH - 1;
     while (decimalNumber != 0) {
         int rest = decimalNumber % convertTo;

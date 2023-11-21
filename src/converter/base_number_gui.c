@@ -22,6 +22,6 @@ void displayBaseNumberGui() {
         return;
     }
 
-    struct BaseNumber baseNumber = constructConvertNumberInputData(numberToConvert, convertFrom, convertOn);
+    struct BaseNumber baseNumber = constructBaseNumber(numberToConvert, convertFrom, convertOn);
     printConvertedNumber(baseNumber);
 }

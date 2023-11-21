@@ -39,6 +39,5 @@ void printFibonacci(FibonacciLength range) {
         if(checkIfSequenceNumberIsAboveLimit(i, fibonacciSequence[i-1], fibonacciSequence[i])) break;
         printf_s("%d. liczba ciagu Fibonacciego: %llu\n", i, fibonacciSequence[i]);
     }
-
     free(fibonacciSequence);
 }

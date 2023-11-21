@@ -54,7 +54,7 @@ void showAllEmployees(struct Employee *employees) {
         printf_s("\nBrutto: %.2f zl", employees[i].brutto);
         printf_s("\nVAT: %.0f%%\n", employees[i].vat);
     }
-    printf("\n");
+    printf_s("\n");
 }
 
 void editEmployee(struct Employee *employees) {
@@ -63,7 +63,7 @@ void editEmployee(struct Employee *employees) {
     scanf_s("%d", &employeeToEditId);
 
     int employeeToEditIndex = findEmployeeIndexInArrayById(employeeToEditId, employees);
-    printf("%d", employeeToEditIndex);
+    printf_s("%d", employeeToEditIndex);
 
     printf_s("\nPodaj nowe dane pracownika o ID %d\n", employeeToEditId);
     printf_s("Nowe imie: ");
@@ -100,7 +100,6 @@ void deleteEmployee(struct Employee *employees) {
     employeesCurrentAmount--;
 }
 
-
 void dispatchOption(enum Option option, struct Employee *employees) {
     switch (option) {
         case CREATE: {
@@ -115,7 +114,7 @@ void dispatchOption(enum Option option, struct Employee *employees) {
         case IMPORT_FROM_CSV: {
             int amountOfEmployeesToAdd = 0;
             struct Employee* importedEmployees = importEmployeesDataFromCsv("files/employees_import.csv", &amountOfEmployeesToAdd);
-            for (int i = 0; i < amountOfEmployeesToAdd; ++i){
+            for (int i = 0; i < amountOfEmployeesToAdd; ++i) {
                 employees[employeesCurrentAmount] = importedEmployees[i];
                 employeesCurrentAmount++;
             }
