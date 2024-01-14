@@ -4,7 +4,7 @@
 #define MAX_STRING_LENGTH 80
 #define MAX_EMPLOYEES_AMOUNT 10
 
-struct Employee {
+typedef struct {
     int id;
     char name[MAX_STRING_LENGTH];
     char surname[MAX_STRING_LENGTH];
@@ -12,10 +12,12 @@ struct Employee {
     int hoursWorked;
     float brutto;
     float vat;
-};
+    int yearbook;
+} Employee;
 
-struct Employee constructNewEmployee(int id, char name[MAX_STRING_LENGTH], char surname[MAX_STRING_LENGTH], char email[MAX_STRING_LENGTH], int hoursWorked, float brutto, float vat) {
-    struct Employee newEmployee;
+
+Employee constructNewEmployee(int id, char name[MAX_STRING_LENGTH], char surname[MAX_STRING_LENGTH], char email[MAX_STRING_LENGTH], int hoursWorked, float brutto, float vat, int yearbook) {
+    Employee newEmployee;
     newEmployee.id = id;
     strcpy(newEmployee.name, name);
     strcpy(newEmployee.surname, surname);
@@ -23,6 +25,7 @@ struct Employee constructNewEmployee(int id, char name[MAX_STRING_LENGTH], char 
     newEmployee.hoursWorked = hoursWorked,
     newEmployee.brutto = brutto;
     newEmployee.vat = vat;
+    newEmployee.yearbook = yearbook;
     return newEmployee;
 }
 

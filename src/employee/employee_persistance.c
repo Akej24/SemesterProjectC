@@ -19,7 +19,7 @@ void replaceGap(char* textWithGaps, char* gap, char* valueToFill){
     free(occurrence);
 }
 
-char* replaceGaps(char* textWithGaps, struct Employee employee) {    
+char* replaceGaps(char* textWithGaps, Employee employee) {    
     char stringVat[MAX_STRING_LENGTH];
     sprintf(stringVat, "%.1f", employee.vat);
 
@@ -62,7 +62,7 @@ char* readTemplate(char* templateFileName) {
     return buffer;
 }
 
-void saveEmployeesDataToCsv(struct Employee *employees, int employeesCurrentAmount) {
+void saveEmployeesDataToCsv(Employee *employees, int employeesCurrentAmount) {
     char fileName[MAX_FILE_NAME];
     // fill the array space with given string
     sprintf(fileName, "files/employees.csv");
@@ -83,13 +83,13 @@ void saveEmployeesDataToCsv(struct Employee *employees, int employeesCurrentAmou
     } else printf("Nie mozna otworzyc pliku employees.csv\n");
 }
 
-struct Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfEmployeesToAdd) {
+Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfEmployeesToAdd) {
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
         printf_s("Error opening file");
         return NULL;
     }
-    struct Employee* employees = malloc(MAX_EMPLOYEES_AMOUNT * sizeof(struct Employee));
+    Employee* employees = malloc(MAX_EMPLOYEES_AMOUNT * sizeof(Employee));
     if (employees == NULL) {
         printf_s("Blad poczas alokowania pamieci dla pracownikow");
         fclose(file);
@@ -99,7 +99,7 @@ struct Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfE
     while (fgets(line, sizeof(line), file)) {
         if (strstr(line, "\"id\";\"name\";\"surname\";\"email\";\"hoursWorked\";\"brutto\";\"vat\"") != NULL) continue;
 
-        struct Employee newEmployee;
+        Employee newEmployee;
         sscanf(line, "\"%d\";\"%49[^\"]\";\"%49[^\"]\";\"%49[^\"]\";\"%d\";\"%f\";\"%f\"",
                &newEmployee.id, newEmployee.name, newEmployee.surname, newEmployee.email,
                &newEmployee.hoursWorked, &newEmployee.brutto, &newEmployee.vat);
@@ -110,7 +110,7 @@ struct Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfE
     }
     fclose(file);
     // realloc memory for given amount of imported employees and next return this array of amount of imported employees
-    struct Employee* resizedEmployees = realloc(employees, (*amountOfEmployeesToAdd) * sizeof(struct Employee));
+    Employee* resizedEmployees = realloc(employees, (*amountOfEmployeesToAdd) * sizeof(struct Employee));
     if (resizedEmployees == NULL) {
         printf_s("Blad podczas zmiany zaalokowanej pamieci dla pracownikow");
         free(employees);
@@ -119,7 +119,7 @@ struct Employee* importEmployeesDataFromCsv(const char* filename, int* amountOfE
     return resizedEmployees;
 }
 
-void generateMailsForEmployees(struct Employee *employees, int employeesCurrentAmount) {
+void generateMailsForEmployees(Employee *employees, int employeesCurrentAmount) {
     for (int i = 0; i < employeesCurrentAmount; i++) {
         char emailFileName[MAX_FILE_NAME];
         sprintf(emailFileName, "files/employee_email_%d.txt", employees[i].id);

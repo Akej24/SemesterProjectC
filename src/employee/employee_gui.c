@@ -2,7 +2,7 @@
 #include "employee_service.h"
 
 void displayEmployeesGui() {
-    struct Employee employees[MAX_EMPLOYEES_AMOUNT];
+    Employee employees[MAX_EMPLOYEES_AMOUNT];
     int option;
     int shouldRun = 1;
     while(shouldRun){
@@ -15,7 +15,8 @@ void displayEmployeesGui() {
         printf_s("[5] Zaimportuj dane pracownikow z CSV\n");
         printf_s("[6] Zapisz dane pracownikow do CSV\n");
         printf_s("[7] Wygeneruj maile dla pracownikow\n");
-        printf_s("[8] Wyjdz\n");
+        printf_s("[8] Pokaz historie\n");
+        printf_s("[9] Wyjdz\n");
         printf_s("------------------------------------\n");
         if (scanf_s("%d", &option) != 1 || option <= 0) {
             printf_s("Wybrales nieprawidlowy numer\n");
@@ -30,7 +31,8 @@ void displayEmployeesGui() {
             case 5: dispatchOption(IMPORT_FROM_CSV, employees); break;
             case 6: dispatchOption(SAVE_TO_CSV, employees); break;
             case 7: dispatchOption(GENERATE_MAILS, employees); break;
-            case 8: shouldRun = 0; break;
+            case 8: dispatchOption(SHOW_HISTORY, employees); break;
+            case 9: shouldRun = 0; break;
             default: printf_s("Wybrales nieprawidlowy numer\n"); break;
         }
     }

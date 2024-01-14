@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include "employee_persistance.h"
+#include "history.h"
 
-enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, IMPORT_FROM_CSV = 5, SAVE_TO_CSV = 6, GENERATE_MAILS =7};
+enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, IMPORT_FROM_CSV = 5, SAVE_TO_CSV = 6, GENERATE_MAILS =7, SHOW_HISTORY = 8};
 static int employeesCurrentAmount = 0;
+static History history;
 
-int findEmployeeIndexInArrayById(int employeeId, struct Employee *employees) {
+int findEmployeeIndexInArrayById(int employeeId, Employee *employees) {
     for (int i = 0; i < sizeof(employees); ++i) 
         if (employees[i].id == employeeId) return i;
     return -1;
 }
 
-struct Employee createNewEmployee() {
+Employee createNewEmployee() {
     int id;
     printf_s("\nPodaj id: ");
     scanf_s("%d", &id);
@@ -39,11 +41,15 @@ struct Employee createNewEmployee() {
     printf_s("Podaj vat: ");
     scanf_s("%f", &vat);
 
+    int yearbook;
+    printf_s("Podaj rok urodzenia: ");
+    scanf_s("%d", &yearbook);
+
     printf_s("Utworzone nowego pracownika o ID: %d\n\n", id);
-    return constructNewEmployee(id, name, surname, email, hoursWorked, brutto, vat);
+    return constructNewEmployee(id, name, surname, email, hoursWorked, brutto, vat, yearbook);
 }
 
-void showAllEmployees(struct Employee *employees) {
+void showAllEmployees(Employee *employees) {
     for (int i = 0; i < employeesCurrentAmount; i++) {
         printf("\n[%d]", i+1);
         printf_s("\nID pracownika: %d", employees[i].id);
@@ -57,7 +63,7 @@ void showAllEmployees(struct Employee *employees) {
     printf_s("\n");
 }
 
-void editEmployee(struct Employee *employees) {
+void editEmployee(Employee *employees) {
     int employeeToEditId;
     printf_s("\n\nPodaj ID pracownika do edycji: ");
     scanf_s("%d", &employeeToEditId);
@@ -87,7 +93,7 @@ void editEmployee(struct Employee *employees) {
     printf_s("Dane pracownika o ID %d zostaly zaktualizowane.\n", employeeToEditId);
 }
 
-void deleteEmployee(struct Employee *employees) {
+void deleteEmployee(Employee *employees) {
     int employeeToDeleteId;
     printf_s("Podaj ID pracownika do usuniecia: ");
     scanf_s("%d", &employeeToDeleteId);
@@ -100,10 +106,15 @@ void deleteEmployee(struct Employee *employees) {
     employeesCurrentAmount--;
 }
 
-void dispatchOption(enum Option option, struct Employee *employees) {
+void showHistory() {
+    for (int i = 0; i < sizeof(history.employees); i++)
+        printf_s("\nID pracownika: %d", history.employees[i].id);
+}
+
+void dispatchOption(enum Option option, Employee *employees) {
     switch (option) {
         case CREATE: {
-            struct Employee newEmployee = createNewEmployee(); 
+            Employee newEmployee = createNewEmployee(); 
             employees[employeesCurrentAmount] = newEmployee; 
             employeesCurrentAmount++;
             break;
@@ -113,7 +124,7 @@ void dispatchOption(enum Option option, struct Employee *employees) {
         case DELETE: deleteEmployee(employees); break;
         case IMPORT_FROM_CSV: {
             int amountOfEmployeesToAdd = 0;
-            struct Employee* importedEmployees = importEmployeesDataFromCsv("files/employees_import.csv", &amountOfEmployeesToAdd);
+            Employee* importedEmployees = importEmployeesDataFromCsv("files/employees_import.csv", &amountOfEmployeesToAdd);
             for (int i = 0; i < amountOfEmployeesToAdd; ++i) {
                 employees[employeesCurrentAmount] = importedEmployees[i];
                 employeesCurrentAmount++;
@@ -122,5 +133,6 @@ void dispatchOption(enum Option option, struct Employee *employees) {
         }
         case SAVE_TO_CSV: saveEmployeesDataToCsv(employees, employeesCurrentAmount); break;
         case GENERATE_MAILS: generateMailsForEmployees(employees, employeesCurrentAmount); break;
+        case SHOW_HISTORY: showHistory(employees); break;
     }
 }
