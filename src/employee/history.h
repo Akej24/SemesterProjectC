@@ -8,6 +8,6 @@ struct History{
     char* messages[MAX_HISTORY_LENGTH][MAX_MESSAGE_LENGTH];
 };
 
-struct History* notifyHistoryAboutEmployee(struct Employee employee, struct History *history, const char* message);
+void notifyHistoryAboutEmployee(struct Employee employee, struct History *history, const char* message);
 
 void showHistory(struct History *history);

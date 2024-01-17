@@ -12,15 +12,15 @@ struct History {
     char messages[MAX_HISTORY_LENGTH][MAX_MESSAGE_LENGTH];
 };
 
-struct History* notifyHistoryAboutEmployee(struct Employee employee, struct History *history, const char* message) {
-    // add only 20+ years old employees with 10+ worked hours to history
-    // if (employee.yearbook >= 2000 || employee.hoursWorked <= 10) return history;
+void notifyHistoryAboutEmployee(struct Employee employee, struct History *history, const char* message) {
+    //add only 20+ years old employees with 10+ worked hours to history
+    if (employee.yearbook >= 2000 || employee.hoursWorked <= 10) return;
     if(historyCounter < MAX_HISTORY_LENGTH) {
         history->employees[historyCounter] = employee;
         strncpy(history->messages[historyCounter], message, MAX_MESSAGE_LENGTH);
         historyCounter++;
     } 
-    return history;
+    return;
 }
 
 void showHistory(struct History *history) {

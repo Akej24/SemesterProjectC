@@ -39,7 +39,11 @@ struct Employee createNewEmployee(struct History *history) {
     printf_s("Podaj vat: ");
     scanf_s("%f", &vat);
 
-    struct Employee newEmployee = constructNewEmployee(id, name, surname, email, hoursWorked, brutto, vat);
+    int yearbook;
+    printf_s("Podaj rocznik: ");
+    scanf_s("%d", &yearbook);
+
+    struct Employee newEmployee = constructNewEmployee(id, name, surname, email, hoursWorked, brutto, vat, yearbook);
     notifyHistoryAboutEmployee(newEmployee, history, "Pracownik dodany");
     printf_s("Utworzone nowego pracownika o ID: %d\n\n", id);
     return newEmployee;
@@ -54,7 +58,8 @@ void showAllEmployees(struct Employee *employees) {
         printf_s("\nEmail: %s", employees[i].email);
         printf_s("\nPrzepracowany czas: %dh", employees[i].hoursWorked);
         printf_s("\nBrutto: %.2f zl", employees[i].brutto);
-        printf_s("\nVAT: %.0f%%\n", employees[i].vat);
+        printf_s("\nVAT: %.0f%%", employees[i].vat);
+        printf_s("\nRocznik: %d\n", employees[i].yearbook);
     }
     printf_s("\n");
 }
@@ -85,6 +90,9 @@ void editEmployee(struct Employee *employees, struct History *history) {
 
     printf_s("Nowy vat: ");
     scanf_s("%f", &employees[employeeToEditIndex].vat);
+
+    printf_s("Nowy rocznik: ");
+    scanf_s("%f", &employees[employeeToEditIndex].yearbook);
 
     notifyHistoryAboutEmployee(employees[employeeToEditIndex], history, "Pracownik zedytowany");
     printf_s("Dane pracownika o ID %d zostaly zaktualizowane.\n", employeeToEditId);
