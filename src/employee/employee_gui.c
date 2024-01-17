@@ -2,7 +2,8 @@
 #include "employee_service.h"
 
 void displayEmployeesGui() {
-    Employee employees[MAX_EMPLOYEES_AMOUNT];
+    struct Employee employees[MAX_EMPLOYEES_AMOUNT];
+    struct History history;
     int option;
     int shouldRun = 1;
     while(shouldRun){
@@ -24,14 +25,14 @@ void displayEmployeesGui() {
             continue;
         }
         switch(option) {
-            case 1: dispatchOption(CREATE, employees); break;
-            case 2: dispatchOption(READ, employees); break;
-            case 3: dispatchOption(UPDATE, employees); break;
-            case 4: dispatchOption(DELETE, employees); break;
-            case 5: dispatchOption(IMPORT_FROM_CSV, employees); break;
-            case 6: dispatchOption(SAVE_TO_CSV, employees); break;
-            case 7: dispatchOption(GENERATE_MAILS, employees); break;
-            case 8: dispatchOption(SHOW_HISTORY, employees); break;
+            case 1: dispatchOption(CREATE, employees, &history); break;
+            case 2: dispatchOption(READ, employees, &history); break;
+            case 3: dispatchOption(UPDATE, employees, &history); break;
+            case 4: dispatchOption(DELETE, employees, &history); break;
+            case 5: dispatchOption(IMPORT_FROM_CSV, employees, &history); break;
+            case 6: dispatchOption(SAVE_TO_CSV, employees, &history); break;
+            case 7: dispatchOption(GENERATE_MAILS, employees, &history); break;
+            case 8: dispatchOption(SHOW_HISTORY, employees, &history); break;
             case 9: shouldRun = 0; break;
             default: printf_s("Wybrales nieprawidlowy numer\n"); break;
         }

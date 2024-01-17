@@ -2,7 +2,7 @@
 #include "employee_persistance.h"
 #include "history.h"
 
-enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, IMPORT_FROM_CSV = 5, SAVE_TO_CSV = 6, GENERATE_MAILS =7, SHOW_HISTORY = 8};
+enum Option {CREATE = 1, READ = 2, UPDATE = 3, DELETE = 4, IMPORT_FROM_CSV = 5, SAVE_TO_CSV = 6, GENERATE_MAILS = 7, SHOW_HISTORY = 8};
 static int employeesCurrentAmount = 0;
 static History history;
 
@@ -12,7 +12,7 @@ int findEmployeeIndexInArrayById(int employeeId, Employee *employees) {
     return -1;
 }
 
-Employee createNewEmployee() {
+struct Employee createNewEmployee(struct History *history) {
     int id;
     printf_s("\nPodaj id: ");
     scanf_s("%d", &id);
@@ -41,12 +41,10 @@ Employee createNewEmployee() {
     printf_s("Podaj vat: ");
     scanf_s("%f", &vat);
 
-    int yearbook;
-    printf_s("Podaj rok urodzenia: ");
-    scanf_s("%d", &yearbook);
-
+    struct Employee newEmployee = constructNewEmployee(id, name, surname, email, hoursWorked, brutto, vat);
+    notifyHistoryAboutEmployee(newEmployee, history, "Pracownik dodany");
     printf_s("Utworzone nowego pracownika o ID: %d\n\n", id);
-    return constructNewEmployee(id, name, surname, email, hoursWorked, brutto, vat, yearbook);
+    return newEmployee;
 }
 
 void showAllEmployees(Employee *employees) {
@@ -63,7 +61,7 @@ void showAllEmployees(Employee *employees) {
     printf_s("\n");
 }
 
-void editEmployee(Employee *employees) {
+void editEmployee(struct Employee *employees, struct History *history) {
     int employeeToEditId;
     printf_s("\n\nPodaj ID pracownika do edycji: ");
     scanf_s("%d", &employeeToEditId);
@@ -90,15 +88,17 @@ void editEmployee(Employee *employees) {
     printf_s("Nowy vat: ");
     scanf_s("%f", &employees[employeeToEditIndex].vat);
 
+    notifyHistoryAboutEmployee(employees[employeeToEditIndex], history, "Pracownik zedytowany");
     printf_s("Dane pracownika o ID %d zostaly zaktualizowane.\n", employeeToEditId);
 }
 
-void deleteEmployee(Employee *employees) {
+void deleteEmployee(struct Employee *employees, struct History *history) {
     int employeeToDeleteId;
     printf_s("Podaj ID pracownika do usuniecia: ");
     scanf_s("%d", &employeeToDeleteId);
 
     int employeeToDeleteIndex = findEmployeeIndexInArrayById(employeeToDeleteId, employees);
+    notifyHistoryAboutEmployee(employees[employeeToDeleteIndex], history, "Pracownik usuniety");
     for (int i = employeeToDeleteIndex; i < employeesCurrentAmount - 1; i++) 
         employees[i] = employees[i + 1];
 
@@ -106,22 +106,17 @@ void deleteEmployee(Employee *employees) {
     employeesCurrentAmount--;
 }
 
-void showHistory() {
-    for (int i = 0; i < sizeof(history.employees); i++)
-        printf_s("\nID pracownika: %d", history.employees[i].id);
-}
-
-void dispatchOption(enum Option option, Employee *employees) {
+void dispatchOption(enum Option option, struct Employee *employees, struct History *history) {
     switch (option) {
         case CREATE: {
-            Employee newEmployee = createNewEmployee(); 
+            struct Employee newEmployee = createNewEmployee(history); 
             employees[employeesCurrentAmount] = newEmployee; 
             employeesCurrentAmount++;
             break;
         }
         case READ: showAllEmployees(employees); break;
-        case UPDATE: editEmployee(employees); break;
-        case DELETE: deleteEmployee(employees); break;
+        case UPDATE: editEmployee(employees, history); break;
+        case DELETE: deleteEmployee(employees, history); break;
         case IMPORT_FROM_CSV: {
             int amountOfEmployeesToAdd = 0;
             Employee* importedEmployees = importEmployeesDataFromCsv("files/employees_import.csv", &amountOfEmployeesToAdd);
@@ -133,6 +128,6 @@ void dispatchOption(enum Option option, Employee *employees) {
         }
         case SAVE_TO_CSV: saveEmployeesDataToCsv(employees, employeesCurrentAmount); break;
         case GENERATE_MAILS: generateMailsForEmployees(employees, employeesCurrentAmount); break;
-        case SHOW_HISTORY: showHistory(employees); break;
+        case SHOW_HISTORY: showHistory(history); break;
     }
 }

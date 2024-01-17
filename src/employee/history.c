@@ -1,13 +1,30 @@
+#include <stdio.h>
+#include <string.h>
 #include "employee.h"
 
-static int historyEmployeesAmount = 0;
+#define MAX_MESSAGE_LENGTH 80
+#define MAX_HISTORY_LENGTH 100
 
-typedef struct {
-    Employee* employees;
-} History;
+static int historyCounter = 0;
 
-History notifyHistoryAboutEmployee(Employee employee, History history) {
-    if(employee.yearbook > 2000 || employee.hoursWorked < 10) return history;
-    history.employees[historyEmployeesAmount] = employee; 
-    historyEmployeesAmount++;
+struct History {
+    struct Employee employees[MAX_HISTORY_LENGTH];
+    char messages[MAX_HISTORY_LENGTH][MAX_MESSAGE_LENGTH];
+};
+
+struct History* notifyHistoryAboutEmployee(struct Employee employee, struct History *history, const char* message) {
+    // add only 20+ years old employees with 10+ worked hours to history
+    // if (employee.yearbook >= 2000 || employee.hoursWorked <= 10) return history;
+    if(historyCounter < MAX_HISTORY_LENGTH) {
+        history->employees[historyCounter] = employee;
+        strncpy(history->messages[historyCounter], message, MAX_MESSAGE_LENGTH);
+        historyCounter++;
+    } 
+    return history;
+}
+
+void showHistory(struct History *history) {
+    for (int i = 0; i < historyCounter; i++)
+        printf_s("\nAkcja: '%s' dla pracownika o ID: %d", history->messages[i], history->employees[i].id);
+    printf_s("\n\n");
 }

@@ -1,4 +1,4 @@
-#include "employee.h"
+#include "history.h"
 
 void saveEmployeesDataToCsv(Employee *employees, int employeesCurrentAmount);
 
