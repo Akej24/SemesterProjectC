@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "employee.h"
+#include "history.h"
 
 #define MAX_FILE_NAME 1000
 #define MAX_TEMPLATE_LENGTH 1000
